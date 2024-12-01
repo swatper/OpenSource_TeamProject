@@ -1,6 +1,6 @@
 #Make execute File
-execute/Shell: source/CustomShell.c source/FileList.c source/WorkingDirectory.c source/ChangeDirectory.c source/MakeDirectory.c
-	gcc -o execute/Shell source/CustomShell.c source/FileList.c source/WorkingDirectory.c source/ChangeDirectory.c source/MakeDirectory.c
+execute/Shell: source/CustomShell.c source/FileList.c source/WorkingDirectory.c source/ChangeDirectory.c source/MakeDirectory.c source/ex_rmdir.c source/ex_ln.c source/ex_cp.c
+	gcc -o execute/Shell source/CustomShell.c source/FileList.c source/WorkingDirectory.c source/ChangeDirectory.c source/MakeDirectory.c source/ex_rmdir.c source/ex_ln.c source/ex_cp.c
 Execute:
 	execute/Shell
 #Delete File 

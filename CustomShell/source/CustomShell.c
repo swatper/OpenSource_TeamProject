@@ -13,6 +13,9 @@
 #include "WorkingDirectory.h"
 #include "ChangeDirectory.h"
 #include "MakeDirectory.h"
+#include "ex_rmdir.h"
+#include "ex_ln.h"
+#include "ex_cp.h"
 #pragma endregion
 
 void Background(char **argv);
@@ -45,7 +48,7 @@ int main(){
     printf("**********커스텀 쉘 실행**********\n");
     while (1) {
         printf("CustomShell> ");
-        gets(buf);  //gets()함수는 곧 사라질 예정
+        gets(buf);
         clearerr(stdin);
         narg = getargs(buf, argv); 
 
@@ -219,6 +222,19 @@ int RunCommand(int narg, char **argv){
             MakeDirectory(argv[1]);
         }
         return 0;            
+    }
+    if (strcmp(argv[0], "rmdir") == 0) {// rmdir 함수 호출
+        execute_rmdir(argv);
+        return 0 ;
+        exit(0);
+    }
+    if (strcmp(argv[0], "ln") == 0) {// ln 함수 호출
+        execute_ln(argv);
+        return 0 ;
+    }
+    if (strcmp(argv[0], "cp") == 0) { //cp 함수 호출
+        execute_cp(argv);
+        return 0 ;
     }
     //기타 명령어 실행 시 반환
     return 1;
