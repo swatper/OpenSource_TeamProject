@@ -60,7 +60,6 @@ int main(){
 
         //명령어 끝에 '&'가 있으면 백그라운드 실행 
         if (narg > 0 && strcmp(argv[narg - 1], "&") == 0) { 
-            printf("명령어 수: %d \n",narg);
             argv[narg - 1] = NULL; // '&' 제거 
             isBackground = true; 
         } 
