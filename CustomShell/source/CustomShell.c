@@ -23,7 +23,7 @@ void RedirectInputOutput(char **argv, int *in_fd, int *out_fd);
 void SignalHandler(int signo);
 int getargs(char *cmd, char **argv);
 int RunCommand(int narg, char **argv);
-
+void PipeCommands(char **cmd1, char **cmd2);
 pid_t chidPID;
 bool isQuit = false;
 
@@ -104,6 +104,11 @@ int main(){
                     //디스크립터 닫기
                     close(fd);
                     argv[i] = NULL; // < 제거
+                    break;
+                }
+                else if(strcmp(argv[i], "|") == 0){
+                    argv[i] = NULL; // | 제거
+                    PipeCommands(argv, argv + i + 1);
                     break;
                 }
             }
@@ -190,7 +195,6 @@ void SignalHandler(int signo) {
     }
 }
 
-
 //구현한 명령어 작동 시 0번환, 기타 다른 명령어면 1을 반환
 int RunCommand(int narg, char **argv){
     //ls 명령어
@@ -238,4 +242,43 @@ int RunCommand(int narg, char **argv){
     }
     //기타 명령어 실행 시 반환
     return 1;
+}
+
+void PipeCommands(char **cmd1, char **cmd2) {
+    int pipe_fd[2];
+
+    // 파이프 생성
+    if (pipe(pipe_fd) == -1) {
+        perror("파이프 생성 실패");
+        exit(1);
+    }
+
+    pid_t pid1;
+    pid_t pid2;
+
+    // 첫 번째 명령어 실행
+    if ((pid1 = fork()) == 0) {
+        close(pipe_fd[0]);
+        dup2(pipe_fd[1], STDOUT_FILENO);
+        close(pipe_fd[1]);
+        execvp(cmd1[0], cmd1);
+        perror("첫 번째 명령 실행 실패");
+        exit(1);
+    }
+
+   // 두 번째 명령어 실행
+    if ((pid2 = fork()) == 0) {
+        close(pipe_fd[1]);
+        dup2(pipe_fd[0], STDIN_FILENO); 
+        close(pipe_fd[0]);
+        execvp(cmd2[0], cmd2);
+        perror("두 번째 명령 실행 실패");
+        exit(1);
+    }
+
+    close(pipe_fd[0]);
+    close(pipe_fd[1]);
+    waitpid(pid1, NULL, 0);
+    waitpid(pid2, NULL, 0);
+    exit(1);
 }
