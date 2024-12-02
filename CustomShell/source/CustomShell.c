@@ -201,18 +201,24 @@ void SignalHandler(int signo) {
 int RunCommand(int narg, char **argv){
     //ls 명령어
     if (narg > 0 && strcmp(argv[0], "ls") == 0) {
-        if(narg == 1){
-            FileList(".");
+        char *path = "."; // 기본 경로는 현재 디렉토리
+        
+        // argv 배열에서 경로를 찾아 설정
+        for (int i = 1; i < narg; i++) {
+            if (argv[i] != NULL){
+                path = argv[i];
+                break;
+            }
         }
-        else{
-            FileList(argv[1]);
-        }
+        
+        // 파일 목록 출력 함수 호출
+        FileList(path);
         return 0;            
     }
     //cd 명령어
     if (narg > 0 && strcmp(argv[0], "cd") == 0) {
         if(narg == 1){
-                ChangeDirectory(NULL);
+            ChangeDirectory(NULL);
         }
         else {
             ChangeDirectory(argv[1]);

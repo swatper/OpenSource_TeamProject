@@ -16,9 +16,9 @@ void FileList(char *path){
     while ((entry = readdir(dir)) != NULL) {
         if (entry->d_name[0] == '.') continue; 
 
-        printf("%s ", entry->d_name); 
+        printf("%s\n", entry->d_name); 
     }
-    printf("\n");
+
     closedir(dir);
     exit(1);
 }
