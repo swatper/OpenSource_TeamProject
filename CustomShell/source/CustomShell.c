@@ -16,6 +16,9 @@
 #include "ex_rmdir.h"
 #include "ex_ln.h"
 #include "ex_cp.h"
+#include "mv.h"
+#include "rm.h"
+#include "cat.h"
 #pragma endregion
 
 void Background(char **argv);
@@ -199,7 +202,7 @@ int RunCommand(int narg, char **argv){
     //ls 명령어
     if (narg > 0 && strcmp(argv[0], "ls") == 0) {
         if(narg == 1){
-            FileList(NULL);
+            FileList(".");
         }
         else{
             FileList(argv[1]);
@@ -239,6 +242,22 @@ int RunCommand(int narg, char **argv){
         execute_cp(argv);
         return 0 ;
     }
+
+    if (strcmp(argv[0], "rm") == 0) { //cp 함수 호출
+        execute_rm(argv[1]);
+        return 0 ;
+    }
+
+    if (strcmp(argv[0], "mv") == 0) { //cp 함수 호출
+        execute_mv(argv[0], argv[1]);
+        return 0 ;
+    }
+
+    if (strcmp(argv[0], "cat") == 0) { //cp 함수 호출
+        execute_cat(argv[1]);
+        return 0 ;
+    }
+
     //기타 명령어 실행 시 반환
     return 1;
 }
