@@ -10,9 +10,9 @@ void execute_rm(const char *file) {
     }
 
     if (remove(file) == 0) {
-        printf("Deleted file: %s\n", file);
+        printf("파일 삭제 성공: %s\n", file);
     } else {
-        perror("Error deleting file");
+        perror("파일 삭제 실패");
     }
     exit(1);
 }
